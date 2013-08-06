@@ -147,6 +147,8 @@ class Client(object):
 
     """
 
+    groups_path = "/groups"
+    group_path = "/groups/%s"
     networks_path = "/networks"
     network_path = "/networks/%s"
     ports_path = "/ports"
@@ -284,6 +286,31 @@ class Client(object):
     def delete_port(self, port):
         """Deletes the specified port."""
         return self.delete(self.port_path % (port))
+
+    @APIParamsCall
+    def create_group(self, body=None):
+        """Create Group"""
+        return self.post(self.groups_path, body=body)
+
+    @APIParamsCall
+    def list_groups(self, retrieve_all=True, **_params):
+        """List Group"""
+        return self.list('groups', self.groups_path, retrieve_all, **_params)
+
+    @APIParamsCall
+    def show_group(self, group, **_params):
+        """Show Group"""
+        return self.get(self.group_path % (group), params=_params)
+
+    @APIParamsCall
+    def delete_group(self, group):
+        """Create Group"""
+        return self.delete(self.group_path % (group))
+
+    @APIParamsCall
+    def update_group(self, group, body=None):
+        """Updates a network."""
+        return self.put(self.group_path % (group), body=body)
 
     @APIParamsCall
     def list_networks(self, retrieve_all=True, **_params):

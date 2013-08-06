@@ -47,6 +47,7 @@ from neutronclient.neutron.v2_0 import router
 from neutronclient.neutron.v2_0 import securitygroup
 from neutronclient.neutron.v2_0 import servicetype
 from neutronclient.neutron.v2_0 import subnet
+from neutronclient.neutron.v2_0 import group
 from neutronclient.openstack.common import strutils
 from neutronclient.version import __version__
 
@@ -84,6 +85,11 @@ def env(*_vars, **kwargs):
 
 COMMAND_V2 = {
     'net-list': network.ListNetwork,
+    'group-create' : group.CreateGroup,
+    'group-list' : group.ListGroup,
+    'group-show' : group.ShowGroup,
+    'group-delete' : group.DeleteGroup,
+    'group-update' : group.UpdateGroup,
     'net-external-list': network.ListExternalNetwork,
     'net-show': network.ShowNetwork,
     'net-create': network.CreateNetwork,

@@ -306,6 +306,8 @@ class TableFormater(table.TableFormatter):
 
 class NeutronCommand(command.OpenStackCommand):
     api = 'network'
+
+    extra_values = True
     log = logging.getLogger(__name__ + '.NeutronCommand')
     values_specs = []
     json_indent = None
@@ -363,6 +365,7 @@ class CreateCommand(NeutronCommand, show.ShowOne):
     resource = None
     log = None
 
+
     def get_parser(self, prog_name):
         parser = super(CreateCommand, self).get_parser(prog_name)
         parser.add_argument(
@@ -382,7 +385,8 @@ class CreateCommand(NeutronCommand, show.ShowOne):
         _merge_args(self, parsed_args, _extra_values,
                     self.values_specs)
         body = self.args2body(parsed_args)
-        body[self.resource].update(_extra_values)
+        if self.extra_values:
+            body[self.resource].update(_extra_values)
         obj_creator = getattr(neutron_client,
                               "create_%s" % self.resource)
         data = obj_creator(body)
@@ -420,10 +424,11 @@ class UpdateCommand(NeutronCommand):
         _merge_args(self, parsed_args, _extra_values,
                     self.values_specs)
         body = self.args2body(parsed_args)
-        if self.resource in body:
-            body[self.resource].update(_extra_values)
-        else:
-            body[self.resource] = _extra_values
+        if self.extra_values:
+            if self.resource in body:
+                body[self.resource].update(_extra_values)
+            else:
+                body[self.resource] = _extra_values
         if not body[self.resource]:
             raise exceptions.CommandError(
                 "Must specify new values to update %s" % self.resource)
